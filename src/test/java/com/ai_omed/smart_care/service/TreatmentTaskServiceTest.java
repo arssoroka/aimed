@@ -65,11 +65,11 @@ class TreatmentTaskServiceTest {
     }
 
     @Test
-    public void createFromPlan2_it_should_return_zero_elements_because_treatment_plans_are_not_started() {
+    public void createFromPlan_it_should_return_zero_elements_because_treatment_plans_are_not_started() {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME0);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME0);
 
         Assertions.assertEquals(0, tasks.size());
     }
@@ -79,7 +79,7 @@ class TreatmentTaskServiceTest {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME02);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME02);
 
         Assertions.assertEquals(Collections.singletonList(TreatmentTaskEntity.builder()
                 .treatmentAction(ACTION3)
@@ -97,7 +97,7 @@ class TreatmentTaskServiceTest {
                 treatmentPlanRepository);
 
         List<TreatmentTaskEntity> tasks = treatmentTaskService
-                .createFromPlan2(DateUtil.parseDateTime("2025-02-24T08:30"));
+                .createFromPlan(DateUtil.parseDateTime("2025-02-24T08:30"));
 
         Assertions.assertEquals(Collections.singletonList(TreatmentTaskEntity.builder()
                 .treatmentAction(ACTION4)
@@ -111,11 +111,11 @@ class TreatmentTaskServiceTest {
 
 
     @Test
-    public void createFromPlan2_it_should_return_one_active_unlimmited_not_recurring_task() {
+    public void createFromPlan_it_should_return_one_active_unlimmited_not_recurring_task() {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME1_5);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME1_5);
 
         Assertions.assertEquals(Collections.singletonList(TreatmentTaskEntity.builder()
                 .treatmentAction(ACTION1)
@@ -128,36 +128,36 @@ class TreatmentTaskServiceTest {
     }
 
     @Test
+    public void createFromPlan_it_should_return_two_active_not_recurring_tasks_unlimmited_and_limited() {
+        TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
+                treatmentPlanRepository);
+
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME2_5);
+
+        Assertions.assertEquals(Arrays.asList(TreatmentTaskEntity.builder()
+                        .treatmentAction(ACTION1)
+                        .subjectPatient(PATIENT1)
+                        .status(ACTIVE)
+                        .onDateTime(DATE_TIME2_5)
+                        .startTime(DATE_TIME1)
+                        .build(),
+                TreatmentTaskEntity.builder()
+                        .treatmentAction(ACTION2)
+                        .subjectPatient(PATIENT1)
+                        .onDateTime(DATE_TIME2_5)
+                        .startTime(DATE_TIME2)
+                        .status(ACTIVE)
+                        .build()
+        ), tasks);
+
+    }
+
+    @Test
     public void createFromPlan2_it_should_return_two_active_not_recurring_tasks_unlimmited_and_limited() {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME2_5);
-
-        Assertions.assertEquals(Arrays.asList(TreatmentTaskEntity.builder()
-                        .treatmentAction(ACTION1)
-                        .subjectPatient(PATIENT1)
-                        .status(ACTIVE)
-                        .onDateTime(DATE_TIME2_5)
-                        .startTime(DATE_TIME1)
-                        .build(),
-                TreatmentTaskEntity.builder()
-                        .treatmentAction(ACTION2)
-                        .subjectPatient(PATIENT1)
-                        .onDateTime(DATE_TIME2_5)
-                        .startTime(DATE_TIME2)
-                        .status(ACTIVE)
-                        .build()
-        ), tasks);
-
-    }
-
-    @Test
-    public void createFromPlan2_it_should_return_two_active_not_recurring_tasks_unlimmited_and_limited2() {
-        TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
-                treatmentPlanRepository);
-
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME2);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME2);
 
         Assertions.assertEquals(Arrays.asList(TreatmentTaskEntity.builder()
                         .treatmentAction(ACTION1)
@@ -178,11 +178,11 @@ class TreatmentTaskServiceTest {
     }
 
     @Test
-    public void createFromPlan2_it_should_return_two_active_not_recurring_tasks_unlimmited_and_limited_and_recurring() {
+    public void createFromPlan_it_should_return_two_active_not_recurring_tasks_unlimmited_and_limited_and_recurring() {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME3);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME3);
 
         Assertions.assertEquals(Arrays.asList(TreatmentTaskEntity.builder()
                         .treatmentAction(ACTION1)
@@ -211,11 +211,11 @@ class TreatmentTaskServiceTest {
 
 
     @Test
-    public void createFromPlan2_it_should_return_two_not_recurring_tasks_active_completed_and_one_recurring_onMonday() {
+    public void createFromPlan_it_should_return_two_not_recurring_tasks_active_completed_and_one_recurring_onMonday() {
         TreatmentTaskService treatmentTaskService = new TreatmentTaskService(treatmentTaskRepository,
                 treatmentPlanRepository);
 
-        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan2(DATE_TIME4);
+        List<TreatmentTaskEntity> tasks = treatmentTaskService.createFromPlan(DATE_TIME4);
 
         Assertions.assertEquals(Arrays.asList(TreatmentTaskEntity.builder()
                         .treatmentAction(ACTION1)

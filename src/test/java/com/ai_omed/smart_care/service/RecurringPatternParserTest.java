@@ -6,6 +6,7 @@ import com.ai_omed.smart_care.service.util.RecurringPatternParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 class RecurringPatternParserTest {
@@ -13,6 +14,7 @@ class RecurringPatternParserTest {
     @Test
     public void itShouldParseOneDay(){
         String str = "every day at 08:00";
+        LocalDateTime with = LocalDateTime.now().with(LocalDateTime.MIN);
 
         List<RecurringPattern> parseResult = RecurringPatternParser.parse(str);
 

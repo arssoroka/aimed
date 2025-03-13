@@ -5,6 +5,7 @@ import com.ai_omed.smart_care.entity.TreatmentTaskEntity;
 import com.ai_omed.smart_care.repository.TreatmentPlanRepository;
 import com.ai_omed.smart_care.repository.TreatmentTaskRepository;
 import com.ai_omed.smart_care.service.dto.RecurringPattern;
+import com.ai_omed.smart_care.service.dto.TreatmentTaskDto;
 import com.ai_omed.smart_care.service.util.DateUtil;
 import com.ai_omed.smart_care.service.util.RecurringPatternParser;
 import org.springframework.stereotype.Service;
@@ -29,25 +30,28 @@ public class TreatmentTaskService {
     }
 
     //Alternative faster approach
-    public List<TreatmentTaskEntity> createFromPlan(LocalDateTime localDateTime) {
-        List<TreatmentTaskEntity> treatmentTasks =
+    public List<TreatmentTaskEntity> createFromPlanAlt(LocalDateTime localDateTime) {
+        List<TreatmentTaskDto> treatmentTasksDtos =
                 repository.findTasksWithStatuses(localDateTime, localDateTime.getDayOfWeek().ordinal() + 1,
                         localDateTime.toLocalTime());
 
-        for (TreatmentTaskEntity treatmentTask : treatmentTasks) {
+        List<TreatmentTaskEntity> treatmentTasks = new ArrayList<>();
+        for (TreatmentTaskDto treatmentTaskDto : treatmentTasksDtos) {
+            TreatmentTaskEntity treatmentTask = TreatmentTaskEntity.from(treatmentTaskDto);
             treatmentTask.setOnDateTime(localDateTime);
             if (treatmentTask.getRecurringStartTime() != null) {
                 LocalDateTime startTime = DateUtil.combineDateWithTime(localDateTime.toLocalDate(),
                         treatmentTask.getRecurringStartTime());
                 treatmentTask.setStartTime(startTime);
             }
+            treatmentTasks.add(treatmentTask);
         }
 
         repository.saveAll(treatmentTasks);
         return treatmentTasks;
     }
 
-    public List<TreatmentTaskEntity> createFromPlan2(LocalDateTime dateTimeParam) {
+    public List<TreatmentTaskEntity> createFromPlan(LocalDateTime dateTimeParam) {
         LocalTime localTime = dateTimeParam.toLocalTime();
         int dayOfWeek = dateTimeParam.getDayOfWeek().ordinal() + 1;
 

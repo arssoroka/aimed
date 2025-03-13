@@ -1,5 +1,6 @@
 package com.ai_omed.smart_care.entity;
 
+import com.ai_omed.smart_care.service.dto.TreatmentTaskDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,5 +36,17 @@ public class TreatmentTaskEntity {
 
     @Column
     private LocalDateTime onDateTime;
+
+    public static TreatmentTaskEntity from(TreatmentTaskDto dto){
+        return TreatmentTaskEntity.builder()
+                .treatmentAction(dto.getTreatmentAction())
+                .subjectPatient(dto.getSubjectPatient())
+                .startTime(dto.getStartTime())
+                .recurringStartTime(dto.getRecurrenceStartTime())
+                .status(dto.getStatus())
+                .build();
+    }
+
+
 
 }

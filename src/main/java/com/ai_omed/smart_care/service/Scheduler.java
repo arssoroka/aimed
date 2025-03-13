@@ -36,7 +36,7 @@ public class Scheduler implements ApplicationListener<ContextRefreshedEvent>, Di
         if(periodicity != null){
             scheduledExecutorService = Executors.newScheduledThreadPool(5);
             command = () -> {
-                treatmentTaskService.createFromPlan2(LocalDateTime.now());
+                treatmentTaskService.createFromPlan(LocalDateTime.now());
 
             };
         }
